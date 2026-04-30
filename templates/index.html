@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Deep Dive — AI Podcast</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-text">The Deep Dive</span>
+        <span class="logo-tag">AI Podcast</span>
+      </div>
+      <div class="header-status" id="podcastStatus">
+        <span class="status-dot idle"></span>
+        <span class="status-label">Idle</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── MAIN LAYOUT ── -->
+  <main class="main">
+
+    <!-- LEFT: HOSTS PANEL -->
+    <aside class="hosts-panel">
+      <h3 class="panel-title">Today's Hosts</h3>
+
+      <div class="host-card host-alex">
+        <div class="host-avatar">A</div>
+        <div class="host-info">
+          <div class="host-name">Alex</div>
+          <div class="host-role">Host & Moderator</div>
+          <div class="host-trait">Guides the conversation</div>
+        </div>
+        <div class="host-wave" id="wave-host"></div>
+      </div>
+
+      <div class="host-card host-sam">
+        <div class="host-avatar">S</div>
+        <div class="host-info">
+          <div class="host-name">Sam</div>
+          <div class="host-role">The Explainer</div>
+          <div class="host-trait">Breaks down complexity</div>
+        </div>
+        <div class="host-wave" id="wave-explainer"></div>
+      </div>
+
+      <div class="host-card host-jamie">
+        <div class="host-avatar">J</div>
+        <div class="host-info">
+          <div class="host-name">Jamie</div>
+          <div class="host-role">Devil's Advocate</div>
+          <div class="host-trait">Challenges everything</div>
+        </div>
+        <div class="host-wave" id="wave-devil"></div>
+      </div>
+
+      <div class="you-card">
+        <div class="host-avatar you-avatar">You</div>
+        <div class="host-info">
+          <div class="host-name">You</div>
+          <div class="host-role">Live Listener</div>
+          <div class="host-trait">Jump in anytime</div>
+        </div>
+      </div>
+
+      <button class="btn-continue" id="continueBtn" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
+        Continue Podcast
+      </button>
+
+      <button class="btn-reset" id="resetBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 4v6h6M23 20v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        New Topic
+      </button>
+    </aside>
+
+    <!-- CENTER: PODCAST FEED -->
+    <section class="podcast-section">
+
+      <!-- Topic Input -->
+      <div class="topic-area" id="topicArea">
+        <div class="topic-hero">
+          <div class="mic-icon">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
+              <rect x="9" y="2" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M5 10a7 7 0 0 0 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="12" y1="17" x2="12" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <line x1="8" y1="22" x2="16" y2="22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h1 class="hero-title">Start a Podcast Episode</h1>
+          <p class="hero-subtitle">Enter any topic and watch Alex, Sam & Jamie dive deep into it live.</p>
+        </div>
+        <div class="topic-input-row">
+          <input
+            type="text"
+            id="topicInput"
+            class="topic-input"
+            placeholder="e.g. The future of artificial intelligence, Black holes, Climate change…"
+            maxlength="200"
+          />
+          <button class="btn-start" id="startBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
+            Start Podcast
+          </button>
+        </div>
+        <div class="topic-examples">
+          <span class="example-label">Try:</span>
+          <button class="example-chip" onclick="setTopic('The ethics of artificial general intelligence')">AGI Ethics</button>
+          <button class="example-chip" onclick="setTopic('Why do humans dream?')">Why We Dream</button>
+          <button class="example-chip" onclick="setTopic('The future of money and crypto')">Future of Money</button>
+          <button class="example-chip" onclick="setTopic('Is democracy the best system of government?')">Democracy</button>
+        </div>
+      </div>
+
+      <!-- Chat Feed -->
+      <div class="chat-feed" id="chatFeed">
+        <div class="feed-empty" id="feedEmpty">
+          <p>The podcast will appear here once you start an episode.</p>
+        </div>
+      </div>
+
+      <!-- Loading Indicator -->
+      <div class="loading-bar" id="loadingBar">
+        <div class="loading-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="loading-text" id="loadingText">Generating discussion…</span>
+      </div>
+
+      <!-- User Message Input -->
+      <div class="user-input-area" id="userInputArea">
+        <div class="input-row">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              id="userInput"
+              class="user-input"
+              placeholder="Ask a question or share a thought…"
+              maxlength="500"
+              disabled
+            />
+          </div>
+          <button class="btn-send" id="sendBtn" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <line x1="22" y1="2" x2="11" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <polygon points="22,2 15,22 11,13 2,9" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+        <p class="input-hint">Press <kbd>Enter</kbd> to send · Hosts will respond to you live</p>
+      </div>
+    </section>
+
+    <!-- RIGHT: EPISODE INFO -->
+    <aside class="info-panel">
+      <div class="ep-card" id="epCard">
+        <div class="ep-label">Now Playing</div>
+        <div class="ep-title" id="epTitle">—</div>
+        <div class="ep-meta" id="epMeta">No episode running</div>
+      </div>
+
+      <div class="legend-card">
+        <h4 class="legend-title">Message Guide</h4>
+        <div class="legend-item">
+          <div class="legend-dot alex-dot"></div>
+          <div>
+            <div class="legend-name">Host (Alex)</div>
+            <div class="legend-desc">Moderates & guides</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot sam-dot"></div>
+          <div>
+            <div class="legend-name">Explainer (Sam)</div>
+            <div class="legend-desc">Breaks down ideas</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot jamie-dot"></div>
+          <div>
+            <div class="legend-name">Devil (Jamie)</div>
+            <div class="legend-desc">Challenges assumptions</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot you-dot"></div>
+          <div>
+            <div class="legend-name">You</div>
+            <div class="legend-desc">Live listener</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-card">
+        <h4 class="tips-title">💡 Tips</h4>
+        <ul class="tips-list">
+          <li>Ask follow-up questions to go deeper</li>
+          <li>Challenge the hosts — they'll push back!</li>
+          <li>Use "Continue" to let them keep talking</li>
+          <li>Try controversial topics for spicy debates</li>
+        </ul>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
